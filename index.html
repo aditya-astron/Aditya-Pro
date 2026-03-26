@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aditya Pandya — Analog Astronaut & IoT Architect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --white: #ffffff;
+      --black: #000000;
+      --grey-dim: rgba(255,255,255,0.45);
+      --grey-faint: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .heading-font { font-family: 'Syne', sans-serif; }
+    .mono { font-family: 'DM Mono', monospace; }
+
+    /* ─── STARFIELD ─── */
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: #000;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 3rem);
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(1.25rem, 3vw, 2.5rem);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    .nav-cta {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      border: 1px solid rgba(255,255,255,0.6);
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.25s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .nav-cta:hover { background: #fff; color: #000; }
+
+    /* Mobile nav toggle */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: #fff;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px; left: 0; right: 0;
+      background: rgba(0,0,0,0.97);
+      backdrop-filter: blur(24px);
+      z-index: 99;
+      padding: 2rem 1.5rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      gap: 0;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: #fff; }
+
+    /* ─── SECTIONS ─── */
+    section { position: relative; z-index: 1; }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 3rem);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px clamp(1.25rem, 4vw, 3rem) 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      margin-bottom: 40px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 11vw, 9rem);
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      margin-bottom: 32px;
+    }
+
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 19px);
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      max-width: 420px;
+      margin: 0 auto 56px;
+      line-height: 1.65;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.7);
+      transition: color 0.2s;
+    }
+    .hero-cta:hover { color: #fff; }
+    .hero-cta .arrow {
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+    .hero-cta:hover .arrow { transform: translateX(5px); }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.25);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.25), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ─── STATS ─── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1rem, 4vw, 3rem);
+      margin-top: clamp(2.5rem, 6vw, 5rem);
+      padding-top: clamp(2rem, 5vw, 4rem);
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(8px, 1.5vw, 10px);
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 6vw, 6rem);
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ─── TIMELINE ─── */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 8px;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: clamp(2rem, 5vw, 3.5rem);
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -28px;
+      top: 9px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
+    }
+
+    .timeline-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .timeline-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .timeline-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+    }
+
+    /* ─── CAPABILITIES ─── */
+    .caps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1rem, 2vw, 1.5rem);
+    }
+    @media (max-width: 900px) {
+      .caps-grid { grid-template-columns: 1fr; }
+    }
+
+    .cap-card {
+      border: 1px solid var(--border);
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      transition: border-color 0.3s, transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .cap-card:hover {
+      border-color: rgba(255,255,255,0.35);
+      transform: translateY(-4px);
+    }
+
+    .cap-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .cap-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .cap-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .cap-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .cap-link:hover { color: #fff; }
+
+    /* ─── EXPERIENCE ─── */
+    .exp-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 2rem;
+      padding-bottom: clamp(2rem, 5vw, 3rem);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(2rem, 5vw, 3rem);
+    }
+    .exp-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    @media (max-width: 640px) {
+      .exp-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+    }
+
+    .exp-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      padding-top: 5px;
+      line-height: 1.5;
+    }
+
+    .exp-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .exp-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ─── MISSION SECTION ─── */
+    .mission-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* ─── PUBLICATIONS ─── */
+    .pub-item {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .pub-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .pub-item:hover { opacity: 0.7; }
+
+    .pub-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 1.75rem);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .pub-desc {
+      font-size: 15px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+    }
+
+    /* ─── RECOGNITIONS ─── */
+    .rec-item {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.3rem, 4vw, 2.2rem);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      padding: clamp(1.2rem, 3vw, 2rem) 0;
+      text-align: center;
+    }
+    .rec-item:last-child { border-bottom: none; }
+
+    /* ─── MEDIA ─── */
+    .media-big {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3.5rem, 12vw, 8rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .media-sub {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      margin-top: 0.5rem;
+    }
+
+    .media-details {
+      margin-top: 2.5rem;
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      line-height: 2;
+      font-weight: 300;
+    }
+
+    .ig-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: clamp(13px, 2vw, 15px);
+      font-weight: 500;
+      letter-spacing: 1px;
+      border: 1px solid rgba(255,255,255,0.5);
+      padding: 18px 36px;
+      border-radius: 100px;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.3s;
+      margin-top: 3rem;
+    }
+    .ig-btn:hover { background: #fff; color: #000; }
+
+    /* ─── CONTACT ─── */
+    .contact-inner {
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* ─── ANIMATED BUTTON (exact original) ─── */
+    .animated-button {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 16px 36px;
+      border: 4px solid transparent;
+      font-size: 15px;
+      background-color: #000;
+      border-radius: 100px;
+      font-weight: 600;
+      color: #fff;
+      box-shadow: 0 0 0 2px #fff;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 1px;
+    }
+    .animated-button svg {
+      position: absolute;
+      width: 24px;
+      fill: #fff;
+      z-index: 9;
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .animated-button .arr-1 { right: 16px; }
+    .animated-button .arr-2 { left: -25%; }
+    .animated-button .circle {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px; height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .animated-button .text {
+      position: relative;
+      z-index: 1;
+      transform: translateX(-12px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .animated-button:hover {
+      box-shadow: 0 0 0 12px transparent;
+      color: #000;
+      border-radius: 12px;
+    }
+    .animated-button:hover .arr-1 { right: -25%; }
+    .animated-button:hover .arr-2 { left: 16px; }
+    .animated-button:hover .text { transform: translateX(12px); }
+    .animated-button:hover svg { fill: #000; }
+    .animated-button:active { scale: 0.95; box-shadow: 0 0 0 4px #fff; }
+    .animated-button:hover .circle { width: 240px; height: 240px; opacity: 1; }
+
+    /* ─── DOWNLOAD BUTTON ─── */
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 12px 24px;
+      border-radius: 100px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.04);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .download-btn:hover {
+      border-color: rgba(255,255,255,0.8);
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+    }
+    .download-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    /* ─── SECTION PADDING ─── */
+    .section-pad {
+      padding: clamp(4rem, 10vw, 7rem) 0;
+    }
+
+    .divider { border-top: 1px solid var(--border); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem clamp(1.25rem, 4vw, 3rem);
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ─── RESPONSIVE: Hide nav links on small screens ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-cta { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STARFIELD -->
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <!-- NAVBAR -->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <div class="nav-logo">ADITYA PANDYA</div>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#journey">Journey</a>
+        <a href="#capabilities">Capabilities</a>
+        <a href="#experience">Work</a>
+        <a href="#mission">Mission</a>
+      </div>
+
+      <a href="#contact" class="nav-cta">CONNECT</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+    <a href="#about"        onclick="closeMenu()">About</a>
+    <a href="#journey"      onclick="closeMenu()">Journey</a>
+    <a href="#capabilities" onclick="closeMenu()">Capabilities</a>
+    <a href="#experience"   onclick="closeMenu()">Work</a>
+    <a href="#mission"      onclick="closeMenu()">Mission</a>
+    <a href="#contact"      onclick="closeMenu()">Connect</a>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section class="hero" aria-label="Hero">
+    <div style="position:relative;z-index:1;width:100%">
+      <div style="display:flex;flex-direction:column;align-items:center">
+
+        <div class="hero-badge">
+          ANALOG ASTRONAUT &nbsp;•&nbsp; IOT ARCHITECT &nbsp;•&nbsp; FOUNDER
+        </div>
+
+        <h1 class="hero-name heading-font">ADITYA PANDYA</h1>
+
+        <p class="hero-sub">
+          Engineer building mission-grade systems for Earth and beyond.<br>
+          India's youngest male analog astronaut.
+        </p>
+
+        <!-- Resume Download Button -->
+        <a href="Aditya_Pandya_CV.pdf" download="Aditya_Pandya_CV.pdf" class="download-btn" style="margin-bottom:2.5rem">
+          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v13M7 11l5 5 5-5"/>
+            <path d="M3 19h18"/>
+          </svg>
+          DOWNLOAD RÉSUMÉ
+        </a>
+
+        <a href="#journey" class="hero-cta">
+          BEGIN THE JOURNEY <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      SCROLL
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       ABOUT
+  ══════════════════════════════════════════ -->
+  <section id="about" class="section-pad divider">
+    <div class="container">
+      <div class="about-grid">
+
+        <div>
+          <p class="section-label">About</p>
+          <h2 class="heading-font" style="font-size:clamp(2rem,6vw,3.5rem);font-weight:700;line-height:1.05;letter-spacing:-0.03em">
+            From classrooms<br>to lunar isolation.
+          </h2>
+        </div>
+
+        <div>
+          <p style="font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,0.7);line-height:1.8;font-weight:300;margin-bottom:1.5rem">
+            I design IoT architectures, long-range telemetry systems, and applied AI that have delivered 95% uptime in simulated missions
+            and 94% link reliability over 10+ km.
+          </p>
+          <p style="font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,0.7);line-height:1.8;font-weight:300">
+            Selected as India's youngest male analog astronaut. Recognized by the Prime Minister, Governor, and Chief Minister of Gujarat.
+            Currently building secure identity platforms and habitat systems while pursuing B.Tech in AI.
+          </p>
+
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number">3,000+</div>
+              <div class="stat-label">Students Impacted</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">160+</div>
+              <div class="stat-label">Mission Hours</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">10K+</div>
+              <div class="stat-label">Followers</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       JOURNEY (TIMELINE)
+  ══════════════════════════════════════════ -->
+  <section id="journey" class="section-pad divider" style="background:#000">
+    <div class="container">
+      <p class="section-label" style="text-align:center;margin-bottom:3.5rem">My Journey</p>
+
+      <div style="max-width:680px;margin:0 auto">
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-date">NOV 2022 – JUL 2024</div>
+            <div class="timeline-title">Ultrasonic Navigation for the Blind</div>
+            <div class="timeline-desc">95% accuracy &bull; 63% collision risk reduction &bull; 15+ iterative test cycles</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-date">JAN 2023 – SEP 2025</div>
+            <div class="timeline-title">Founder — Innogine Education Platform</div>
+            <div class="timeline-desc">3,000+ students &bull; 65% higher engagement &bull; 20+ STEM programs</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-date">SEP 2025 – PRESENT</div>
+            <div class="timeline-title">Founder — IDEN Smart Student Identity</div>
+            <div class="timeline-desc">1,000+ records secured &bull; 70% reduction in verification time</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-date">AUG 2025 – PRESENT</div>
+            <div class="timeline-title">IoT Developer — AAKA Space</div>
+            <div class="timeline-desc">Multi-sensor habitat system &bull; 95% uptime &bull; 45% faster anomaly detection</div>
+          </div>
+
+          <div class="timeline-item" style="margin-bottom:0">
+            <div class="timeline-date">FEB 2026</div>
+            <div class="timeline-title">India's Youngest Male Analog Astronaut</div>
+            <div class="timeline-desc">160+ hours isolation &bull; 15,000+ data points &bull; Featured in Times of India &amp; ANI</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CAPABILITIES
+  ══════════════════════════════════════════ -->
+  <section id="capabilities" class="section-pad divider">
+    <div class="container">
+      <p class="section-label" style="text-align:center;margin-bottom:3.5rem">Capabilities</p>
+
+      <div class="caps-grid">
+
+        <div class="cap-card">
+          <span class="cap-icon">🌐</span>
+          <div class="cap-title">IoT &amp; Hardware Systems</div>
+          <div class="cap-desc">Mission-grade multi-sensor architectures with 95% uptime and real-time logging across I²C, SPI, UART protocols.</div>
+          <a href="https://github.com/aditya-astron/Mission-Grade-IOT-Architecture" target="_blank" rel="noopener" class="cap-link">VIEW REPOSITORY →</a>
+        </div>
+
+        <div class="cap-card">
+          <span class="cap-icon">📡</span>
+          <div class="cap-title">Satellite Telemetry</div>
+          <div class="cap-desc">Hybrid LoRa + laser-optical systems achieving 94% link reliability over 10+ km, with potential 100× scalability.</div>
+          <a href="https://github.com/aditya-astron/hybrid-lora-laser-telemetry-system" target="_blank" rel="noopener" class="cap-link">VIEW REPOSITORY →</a>
+        </div>
+
+        <div class="cap-card">
+          <span class="cap-icon">🧠</span>
+          <div class="cap-title">Applied AI Systems</div>
+          <div class="cap-desc">45% higher decision accuracy via generative AI workflows, anomaly detection models, and structured optimization scripts.</div>
+          <a href="https://github.com/aditya-astron/AI-iot-habitat-monitoring" target="_blank" rel="noopener" class="cap-link">VIEW REPOSITORY →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       WORK EXPERIENCE
+  ══════════════════════════════════════════ -->
+  <section id="experience" class="section-pad divider" style="background:#000">
+    <div class="container">
+      <p class="section-label" style="text-align:center;margin-bottom:3.5rem">Work Experience</p>
+
+      <div style="max-width:720px;margin:0 auto">
+
+        <div class="exp-item">
+          <div class="exp-date">AUG 2025<br>– PRESENT</div>
+          <div>
+            <div class="exp-title">IoT &amp; Sensor Systems Developer — AAKA Space</div>
+            <div class="exp-desc">Engineered and deployed a multi-sensor IoT habitat monitoring system tracking 6+ environmental parameters. Improved anomaly detection speed by 45% and maintained ~95% system uptime during analog mission simulations.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-date">SEP 2025<br>– PRESENT</div>
+          <div>
+            <div class="exp-title">Founder — IDEN Smart Student Identity Platform</div>
+            <div class="exp-desc">Built and deployed a secure digital identity system managing 1,000+ student records. Reduced manual verification time by 70% and administrative workload by 60% through role-based access control and automated authentication.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-date">JAN 2023<br>– SEP 2025</div>
+          <div>
+            <div class="exp-title">Founder — Innogine Skill-Based Education Platform</div>
+            <div class="exp-desc">Impacted 3,000+ students across 20+ STEM and entrepreneurship programs. Increased hands-on engagement by 65% through project-based learning modules.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-date">NOV 2022<br>– JUL 2024</div>
+          <div>
+            <div class="exp-title">Volunteer — Blind People's Association, Ahmedabad</div>
+            <div class="exp-desc">Developed a real-time ultrasonic navigation prototype achieving 95% obstacle detection accuracy. Reduced collision risk by 63% through 15+ iterative user testing cycles.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       ANALOG ASTRONAUT MISSION
+  ══════════════════════════════════════════ -->
+  <section id="mission" class="section-pad divider">
+    <div class="container">
+      <div class="mission-inner">
+        <p class="section-label">India's Youngest Male Analog Astronaut</p>
+        <h2 class="heading-font" style="font-size:clamp(2rem,6vw,3.2rem);font-weight:700;line-height:1.1;letter-spacing:-0.03em;margin-bottom:1.5rem">
+          160+ hours in simulated lunar isolation
+        </h2>
+        <p style="font-size:15px;color:rgba(255,255,255,0.5);line-height:1.8;font-weight:300">
+          Designed and operated a multi-sensor habitat with 100% protocol compliance and 5+ integrated environmental systems.
+          Logged 15,000+ mission data points. Featured in Times of India &amp; ANI.
+        </p>
+        <div style="margin-top:2.5rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap">
+          <a href="https://www.aninews.in/news/business/17-year-old-aditya-pandya-becomes-indias-youngest-male-analog-astronaut-after-completing-aa-ka-spaces-lunar-habitat-mission20260209150455/" target="_blank" rel="noopener" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">READ ANI →</a>
+          <a href="https://timesofindia.indiatimes.com/science/meet-aditya-pandya-17-year-old-becomes-indias-youngest-analogue-astronaut-who-lived-designed-and-tested-a-moon-like-habitat/articleshow/128305515.cms" target="_blank" rel="noopener" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">TIMES OF INDIA →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PUBLICATIONS
+  ══════════════════════════════════════════ -->
+  <section class="section-pad divider" style="background:#000">
+    <div class="container">
+      <p class="section-label" style="text-align:center;margin-bottom:3.5rem">Publications</p>
+      <div style="max-width:600px;margin:0 auto">
+
+        <a href="https://amzn.in/d/0ffS2CfK" target="_blank" rel="noopener" class="pub-item">
+          <div class="pub-title">Quantum Diaries</div>
+          <div class="pub-desc">Explores the nature of reality through physics, astronomy, and philosophy</div>
+        </a>
+
+        <a href="https://amzn.in/d/0ht26MWc" target="_blank" rel="noopener" class="pub-item">
+          <div class="pub-title">Quantum Physics Explained Without the Headache</div>
+          <div class="pub-desc">Beginner-friendly exploration of quantum physics concepts</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       RECOGNITIONS
+  ══════════════════════════════════════════ -->
+  <section class="section-pad divider">
+    <div class="container">
+      <p class="section-label" style="text-align:center;margin-bottom:3rem">Recognitions</p>
+      <div style="max-width:520px;margin:0 auto">
+        <div class="rec-item">Prime Minister of India</div>
+        <div class="rec-item">Governor of Gujarat</div>
+        <div class="rec-item">Chief Minister of Gujarat</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       MEDIA & OUTREACH
+  ══════════════════════════════════════════ -->
+  <section class="section-pad divider" style="background:#000">
+    <div class="container" style="text-align:center">
+      <p class="section-label" style="margin-bottom:2rem">Media &amp; Outreach</p>
+
+      <div class="media-big">10,000+</div>
+      <div class="media-sub">Followers on Instagram</div>
+
+      <div class="media-details">
+        Average engagement 8–12% per post<br>
+        100,000+ cumulative impressions<br>
+        Astronomy &amp; STEM sessions at 25+ institutions
+      </div>
+
+      <div>
+        <a href="https://www.instagram.com/adi_astron/" target="_blank" rel="noopener" class="ig-btn">
+          FOLLOW @adi_astron <span style="font-size:1.4rem;line-height:1">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CONTACT
+  ══════════════════════════════════════════ -->
+  <section id="contact" class="section-pad divider">
+    <div class="container">
+      <div class="contact-inner">
+        <h2 class="heading-font" style="font-size:clamp(2rem,7vw,3.5rem);font-weight:700;line-height:1.05;letter-spacing:-0.03em;margin-bottom:1rem">
+          Let's build the next mission.
+        </h2>
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;margin-bottom:3rem">
+          IoT &bull; AI &bull; Space systems &bull; Anything real-world.
+        </p>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem">
+          <button onclick="window.location.href='mailto:founder.astron@gmail.com'" class="animated-button">
+            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+            </svg>
+            <span class="text">CONTACT ME</span>
+            <span class="circle"></span>
+            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+            </svg>
+          </button>
+
+          <!-- Resume download in contact too -->
+          <a href="Aditya_Pandya_CV.pdf" download="Aditya_Pandya_CV.pdf" class="download-btn">
+            <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v13M7 11l5 5 5-5"/>
+              <path d="M3 19h18"/>
+            </svg>
+            DOWNLOAD RÉSUMÉ
+          </a>
+        </div>
+
+        <div style="margin-top:2.5rem;display:flex;flex-direction:column;gap:6px;font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,0.3)">
+          <a href="mailto:founder.astron@gmail.com" style="color:inherit;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">founder.astron@gmail.com</a>
+          <a href="tel:+918866906610" style="color:inherit;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">+91 88669 06610</a>
+          <a href="https://www.linkedin.com/in/adiastron" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">linkedin.com/in/adiastron</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 ADITYA PANDYA &nbsp;•&nbsp; BUILT FOR EARTH &amp; BEYOND
+  </footer>
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
+  <script>
+    /* ── Starfield ── */
+    (function() {
+      const canvas = document.getElementById('stars');
+      const ctx = canvas.getContext('2d');
+      let W, H, stars = [];
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        stars = [];
+        for (let i = 0; i < 340; i++) stars.push(new Star());
+      }
+
+      class Star {
+        constructor() { this.reset(true); }
+        reset(init) {
+          this.x     = Math.random() * W;
+          this.y     = init ? Math.random() * H : 0;
+          this.size  = Math.random() * 1.6 + 0.3;
+          this.speed = Math.random() * 0.22 + 0.06;
+          this.alpha = Math.random() * 0.6 + 0.25;
+        }
+        update() {
+          this.y += this.speed;
+          if (this.y > H) this.reset(false);
+        }
+        draw() {
+          ctx.globalAlpha = this.alpha;
+          ctx.fillStyle   = '#fff';
+          ctx.fillRect(this.x, this.y, this.size, this.size);
+        }
+      }
+
+      function animate() {
+        ctx.globalAlpha = 1;
+        ctx.fillStyle   = 'rgba(0,0,0,0.13)';
+        ctx.fillRect(0, 0, W, H);
+        stars.forEach(s => { s.update(); s.draw(); });
+        requestAnimationFrame(animate);
+      }
+
+      resize();
+      animate();
+      window.addEventListener('resize', resize);
+    })();
+
+    /* ── Mobile menu ── */
+    const hamburger   = document.getElementById('hamburger');
+    const mobileMenu  = document.getElementById('mobileMenu');
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    /* Close menu when clicking outside */
+    document.addEventListener('click', e => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMenu();
+    });
+  </script>
+</body>
+</html>
